@@ -48,7 +48,12 @@ public class Aresta {
     }
     
     public void decrementaFluxo(int b){
-        this.fluxo -= b;
+        if((this.fluxo-b) <0 ){
+            this.fluxo = 0;
+        } else {
+            this.fluxo -= b;
+        }
+        
     }
     
     public String getTipo(){

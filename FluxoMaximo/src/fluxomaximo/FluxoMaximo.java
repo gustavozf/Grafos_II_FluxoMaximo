@@ -57,7 +57,7 @@ public class FluxoMaximo {
         Original = new Grafo(n,"Original",s, t);
         Residual = new Grafo(n,"Residual",s, t);
                 
-        montaGrafos("grafo.txt", Original, Residual);
+        montaGrafos("grafo3.txt", Original, Residual);
         
         Original.printGrafo();
         Residual.printGrafo();

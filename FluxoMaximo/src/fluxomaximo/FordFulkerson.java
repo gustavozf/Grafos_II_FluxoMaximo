@@ -35,6 +35,7 @@ public class FordFulkerson {
             P = new ArrayList<>();
             caminho = new ArrayList<>();
             buscaLargura(Residual, Original.getFonte(), dicionario);
+            System.out.print("\nCaminho:");
             encontraCaminho(Residual, caminho, dicionario, Original.getFonte(), Original.getSumidouro());
             if (caminho.size() == 0){
                 controlador = false;
@@ -68,7 +69,9 @@ public class FordFulkerson {
         int total = 0;
         
         for(Aresta x: Residual.getVertice(Residual.getSumidouro()).getListaAdj()){
-            total += x.getFluxo();
+            if(x.getTipo().equals("retorno")){
+                total += x.getFluxo();
+            }
         }
         
         return total;
@@ -76,13 +79,13 @@ public class FordFulkerson {
     
     private int BuscaGargalo(List<Aresta> P){
         int minimo;
-        minimo = P.get(0).getCapacidade();
+        minimo = P.get(0).getFluxo();
         for(Aresta i :P){
            if(i.getFluxo()<minimo && i.getFluxo()!=0){
-               minimo = i.getCapacidade();
+               minimo = i.getFluxo();
            }
        }
-       System.out.println("Gargalo: "+ minimo);
+       System.out.println("\nGargalo: "+ minimo);
        return minimo;
     }
     
@@ -98,12 +101,14 @@ public class FordFulkerson {
     private void encontraCaminho(Grafo Residual, List<Vertice> caminho, Auxiliares[] dicionario, int s, int t){
         if (s==t){
             caminho.add(Residual.getVertice(s));
+            System.out.print(" "+Residual.getVertice(s).getIndex());
         } else {
-            if(dicionario[t].getPredecessor() == -1){
+            if(dicionario[t].getPredecessor() == -1){//Nulo
                 System.out.println("Nao existe mais caminho da fonte ao sumidouro!");
             } else {
                 encontraCaminho(Residual, caminho, dicionario, s, dicionario[t].getPredecessor());
                 caminho.add(Residual.getVertice(t));
+                System.out.print(" "+Residual.getVertice(t).getIndex());
             }
         }
     }
