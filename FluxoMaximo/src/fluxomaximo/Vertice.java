@@ -12,14 +12,14 @@ import java.util.List;
  * @author gustavozf
  */
 public class Vertice {
-    private final int index;
-    private  List<Vertice> listaAdj;//Lista de adjacencia
+    private final int index; //Nome do vertice
+    private  List<Aresta> listaAdj;//Lista de adjacencia
     
     Vertice(int index){
         this.index = index;
         this.listaAdj = new ArrayList <>();
     }
-    public void addAresta(Vertice x){
+    public void addAresta(Aresta x){
         this.listaAdj.add(x);
     }
     
@@ -27,7 +27,7 @@ public class Vertice {
         return this.index;
     }
     
-    public List<Vertice> getListaAdj(){
+    public List<Aresta> getListaAdj(){
         return this.listaAdj;
     }
 }

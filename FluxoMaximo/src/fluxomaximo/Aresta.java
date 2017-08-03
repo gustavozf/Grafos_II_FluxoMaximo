@@ -10,22 +10,25 @@ package fluxomaximo;
  * @author gustavozf
  */
 public class Aresta {
-    private final int u, v;
+    private final int v; //Nome
+    private final int u; //Informa na lista de quem esta ligado
+    private final String tipo;
     private int capacidade, fluxo;
     
-    Aresta(int u, int v, int capacidade, int fluxo){
-        this.u = u;
+    Aresta(int u, int v, int capacidade, String tipo){
         this.v = v;
+        this.u = u;
         this.capacidade = capacidade;
         this.fluxo = 0;
+        this.tipo = tipo;
     }
     
-    public int getU(){
-        return this.u;
-    }
-    
-    public int getV(){
+    public int getV(){//getNome
         return this.v;
+    }
+    
+    public int getU(){//Pega o index em quem esta ligado
+        return this.u;
     }
     
     public int getCapacidade(){
@@ -40,7 +43,15 @@ public class Aresta {
         this.capacidade = newCapacidade;
     }
     
-    public void setFluxo(int newFluxo){
-        this.fluxo = newFluxo;
+    public void incrementaFluxo(int b){
+        this.fluxo += b;
+    }
+    
+    public void decrementaFluxo(int b){
+        this.fluxo -= b;
+    }
+    
+    public String getTipo(){
+        return this.tipo;
     }
 }

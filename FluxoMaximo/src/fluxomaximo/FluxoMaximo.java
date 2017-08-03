@@ -8,6 +8,7 @@ package fluxomaximo;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  *
@@ -19,53 +20,75 @@ public class FluxoMaximo {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
         Grafo Original, Residual;
-        Aresta[] AresOriginal, AresResidual;
+        Original = null;
+        Residual = null;
+        Scanner scan = new Scanner(System.in);
+        int n, m, t, s;
         
-        montaGrafos("grafo.txt", Original, Residual, AresOriginal, AresResidual);
+        System.out.println("ULTIMATE PROGRAMA OF FLUXOS");
+        System.out.print("Insira o numero de Vertices: ");        
+        n = scan.nextInt(); // numero de vertices
+        System.out.println();
+        System.out.print("Insira o numero de Arestas: ");
+        m = scan.nextInt(); // numero de arestas
+        System.out.println();
+        System.out.print("Insira o vertice Fonte: ");        
+        s = scan.nextInt(); // fonte
+        System.out.println();
+        System.out.print("Insira o vertice Sumidouro: ");
+        t = scan.nextInt(); // sumidouro
+        System.out.println();
+            
+        System.out.println("n= "+n+" m="+m+" s="+s+" t="+t);
+            
+        Original = new Grafo(n,"Original",s, t);
+        Residual = new Grafo(n,"Residual",s, t);
+        
+        montaGrafos("grafo.txt", Original, Residual);
+        
+        Original.printGrafo();
+        Residual.printGrafo();
+        
         // TODO code application logic here
     }
     
-    private static void montaGrafos(String arquivo, Grafo Original, Grafo Residual, Aresta[] AresOriginal, Aresta[] AresResidual){
+    private static void montaGrafos(String arquivo, Grafo Original, Grafo Residual){
         String file = System.getProperty("user.dir") + "/src/fluxomaximo/" + arquivo;
         System.out.println("Arquivo de entrada: " + file);
         BufferedReader br = null;
         String[] parametros;
-        int n, m, t, s;
+        int[] aux;
+        aux = new int[3];
         String line = "";
         String SplitBy = " ";
-        
-        int i = 0;
-        int aux1 = 0, aux2 = 0;
+        int i = 0;        
         
         try {//inserir vertices
+            String[] arestas;
             br = new BufferedReader(new FileReader(file));
-            line = br.readLine();
-            parametros = line.split(SplitBy);
-            n = Integer.parseInt(parametros[0]); // numero de vertices
-            m = Integer.parseInt(parametros[1]); // numero de arestas
-            s = Integer.parseInt(parametros[2]); // fonte
-            t = Integer.parseInt(parametros[3]); // sumidouro
-            
-            Original = new Grafo(n,"Original",s, t);
-            Residual = new Grafo(n,"Residual",s, t);
-            AresOriginal = new Aresta[m];
-            AresResidual = new Aresta[m*2]; // pois este tera arestas de avanco e retorno, o dobro do original
             
             while ((line = br.readLine()) != null) { //le linha por linha do arquivo
-                String[] arestas = line.split(SplitBy);
+                arestas = line.split(SplitBy);
+                aux[0] = Integer.parseInt(arestas[0]);
+                aux[1] = Integer.parseInt(arestas[1]);
+                aux[2] = Integer.parseInt(arestas[2]);
+                if(Original.getVertice(aux[0]) == null){ //se nao tem o primeiro numero inserido,
+                    Original.addVertice(aux[0]);         // insere no grafo original
+                    Residual.addVertice(aux[0]);         // insere no grafo residual
+                }
+                if(Original.getVertice(aux[1]) == null){ ////se nao tem o segundo numero inserido
+                    Original.addVertice(aux[1]);
+                    Residual.addVertice(aux[1]);
+                }
+                Original.addAresta(aux[0], aux[1], aux[2], "avanco"); //insere na lista do vertice na posicao aux[0], aux[1] e a capacidade aux[2]
+                Residual.addAresta(aux[0], aux[1], aux[2], "avanco");//Insere a aresta de avanço
+                Residual.addAresta(aux[1], aux[0], aux[2], "retorno");//insere a aresta de retorno
                 
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        
-        line = "";
-        br = null;
-        
-        
+        }  
     }
-    
 }
