@@ -15,11 +15,11 @@ public class Aresta {
     private final String tipo;
     private int capacidade, fluxo;
     
-    Aresta(int u, int v, int capacidade, String tipo){
+    Aresta(int u, int v, int capacidade, String tipo, int fluxo){
         this.v = v;
         this.u = u;
         this.capacidade = capacidade;
-        this.fluxo = 0;
+        this.fluxo = fluxo;
         this.tipo = tipo;
     }
     

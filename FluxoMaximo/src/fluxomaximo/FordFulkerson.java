@@ -15,20 +15,37 @@ import java.util.List;
  * @author gustavozf
  */
 public class FordFulkerson {
+    
+    public FordFulkerson(){
+        
+    }
  
     public int MaxFlow(Grafo Original, Grafo Residual){
         Auxiliares[] dicionario = new Auxiliares[Original.getTamanho()]; //cria um "dicionario" para guardar cor, distancia, predecessor e etc
         boolean controlador = true;
-        int fluxoMax = 0;
-        List<Aresta> P = new ArrayList<>();
+        int fluxoMax = 0, i;
+        List<Aresta> P;
+        List<Vertice> caminho;
         
-        while(controlador){
-            buscaLargura(Residual, Original.getFonte(), dicionario);
-            //encontraCaminho
-            Aumenta(Original, Residual, P);
+        for(i = 0; i< Original.getTamanho(); i++){//not = Network of Thrones
+            dicionario[i] = new Auxiliares(i);//adiciona um objeto auxiliar para cada 
         }
         
-        return fluxoMax; //Lembrar de mudar retorno
+        while(controlador){
+            P = new ArrayList<>();
+            caminho = new ArrayList<>();
+            buscaLargura(Residual, Original.getFonte(), dicionario);
+            encontraCaminho(Residual, caminho, dicionario, Original.getFonte(), Original.getSumidouro());
+            if (caminho.size() == 0){
+                controlador = false;
+            } else {
+                criaP(P, caminho, Residual);
+                Aumenta(Original, Residual, P);
+                Residual.printGrafo();
+            }
+        }
+        
+        return buscaMaxFlow(Residual); //Lembrar de mudar retorno
     }
     
     private void Aumenta(Grafo Original, Grafo Residual, List<Aresta> P){
@@ -47,19 +64,48 @@ public class FordFulkerson {
         }
     }
     
+    private int buscaMaxFlow(Grafo Residual){
+        int total = 0;
+        
+        for(Aresta x: Residual.getVertice(Residual.getSumidouro()).getListaAdj()){
+            total += x.getFluxo();
+        }
+        
+        return total;
+    }
+    
     private int BuscaGargalo(List<Aresta> P){
         int minimo;
         minimo = P.get(0).getCapacidade();
         for(Aresta i :P){
-           if(i.getCapacidade()<minimo){
+           if(i.getFluxo()<minimo && i.getFluxo()!=0){
                minimo = i.getCapacidade();
            }
        }
+       System.out.println("Gargalo: "+ minimo);
        return minimo;
     }
     
-    private void encontraCaminho(List<Aresta> P, Auxiliares[] dicionario){
+    private void criaP(List<Aresta> P, List<Vertice> caminho,  Grafo Residual){
+        int i;
         
+        for (i = 0; i< caminho.size()-1; i++){
+            P.add(caminho.get(i)                            //Pega o vertice i e busca a aresta nele
+                    .getAresta(caminho.get(i+1).getIndex()));// que possui o index do vertice i+1 no caminho
+        }
+    }
+    
+    private void encontraCaminho(Grafo Residual, List<Vertice> caminho, Auxiliares[] dicionario, int s, int t){
+        if (s==t){
+            caminho.add(Residual.getVertice(s));
+        } else {
+            if(dicionario[t].getPredecessor() == -1){
+                System.out.println("Nao existe mais caminho da fonte ao sumidouro!");
+            } else {
+                encontraCaminho(Residual, caminho, dicionario, s, dicionario[t].getPredecessor());
+                caminho.add(Residual.getVertice(t));
+            }
+        }
     }
     
     private void inicializa(Grafo G, int s, Auxiliares [] dicionario){//Busca
@@ -98,5 +144,11 @@ public class FordFulkerson {
             }
             dicionario[u].setCorPreto();
         }
+        /*System.out.print("Busca:");
+        for(Auxiliares x: dicionario){
+            System.out.print(" "+x.getPredecessor());
+        }
+        System.out.println();*/
+
     }
 }

@@ -27,8 +27,8 @@ public class Grafo {
         this.Grafo[index] = new Vertice(index);
     }
     
-    public void addAresta(int index1, int index2, int capacidade, String tipo){
-        this.Grafo[index1].addAresta(new Aresta(index1, index2, capacidade, tipo));
+    public void addAresta(int index1, int index2, int capacidade,int fluxo, String tipo){
+        this.Grafo[index1].addAresta(new Aresta(index1, index2, capacidade, tipo, fluxo));
     }
     
     public String getNome(){
@@ -95,7 +95,7 @@ public class Grafo {
         for(i=0; i<this.num_vertices; i++){
             System.out.print("Vertice: " + i + " => Lista de Adjacencia: ");
             for(Aresta j : Grafo[i].getListaAdj()){
-                System.out.print(j.getV() + "(" + j.getCapacidade()+"), ");
+                System.out.print(j.getV() + "(C: " + j.getCapacidade()+", F: "+j.getFluxo()+"), ");
             }
             System.out.println();
         }

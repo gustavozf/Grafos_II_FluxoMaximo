@@ -27,6 +27,16 @@ public class Vertice {
         return this.index;
     }
     
+    public Aresta getAresta(int i){
+        for(Aresta x: this.getListaAdj()){
+            if(x.getV() == i){
+                return x;
+            }
+        }
+        
+        return null;
+    }
+    
     public List<Aresta> getListaAdj(){
         return this.listaAdj;
     }
